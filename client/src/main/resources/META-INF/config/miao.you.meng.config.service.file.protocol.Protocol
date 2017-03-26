@@ -1,0 +1,4 @@
+classpath=miao.you.meng.config.service.file.protocol.ClasspathProtocol
+file=miao.you.meng.config.service.file.protocol.FileProtocol
+http=miao.you.meng.config.service.file.protocol.HttpProtocol
+https=miao.you.meng.config.service.file.protocol.HttpsProtocol

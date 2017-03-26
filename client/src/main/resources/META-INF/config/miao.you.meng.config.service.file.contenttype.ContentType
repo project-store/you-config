@@ -1,0 +1,2 @@
+properties=miao.you.meng.config.service.file.contenttype.PropertiesContentType
+xml=miao.you.meng.config.service.file.contenttype.XmlContentType
