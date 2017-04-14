@@ -2,9 +2,6 @@ package miao.you.meng.config.zookeeper;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
-import miao.you.meng.config.ConfigProfile;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.utils.ZKPaths;
@@ -17,7 +14,7 @@ import java.util.Set;
  * zookeeper 配置文件对应的对象
  * Created by miaoyoumeng on 2017/4/7.
  */
-public class ZookeeperConfigProfile implements ConfigProfile {
+public class ZookeeperConfigProfile {
 
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperConfigProfile.class);
     private static final ExponentialBackoffRetry DEFAULT_RETRY_POLICY = new ExponentialBackoffRetry(1000, 3);
@@ -92,7 +89,6 @@ public class ZookeeperConfigProfile implements ConfigProfile {
         return ZKPaths.makePath(rootNode, version);
     }
 
-    @Override
     public String getVersion() {
         return version;
     }

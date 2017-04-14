@@ -1,15 +1,19 @@
 package miao.you.meng.config;
 
-import com.google.common.base.Preconditions;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import com.google.common.collect.Lists;
+import miao.you.meng.config.factory.CuratorClientFactory;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.GetChildrenBuilder;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by miaoyoumeng on 2017/4/12.
@@ -18,30 +22,47 @@ public class ZookeeperConfigProperties {
 
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperConfigProperties.class);
 
-    private static final String DEFAULT_ZOOKEEPER_CLUSTER_ADDRESS = "127.0.0.1:2181";
+    private static final String CONFIG_ROOT="AppConfig";
 
-    private static CuratorFramework client;
-    static {
-        String zookeeperConfigAddress = DEFAULT_ZOOKEEPER_CLUSTER_ADDRESS;
-        try {
-            InputStream in = ZookeeperConfigProperties.class.getClassLoader().getResourceAsStream("zookeeper-config.properties");
-            PropertiesConfiguration config = new PropertiesConfiguration("zookeeper-config.properties");
-            zookeeperConfigAddress = config.getString("zookeeper.cluster", DEFAULT_ZOOKEEPER_CLUSTER_ADDRESS);
-            String application = config.getString("application");
+    private static final String BACK_SLANT="/";
 
-            logger.warn("zookeeper address: {}, application: {}", zookeeperConfigAddress, application);
-        } catch (ConfigurationException e) {
+
+    public static boolean isExist(String path) throws Exception {
+        Stat stat = CuratorClientFactory.getInstance().checkExists().forPath(path);
+        if(stat != null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 从zookeeper中加载配置
+     *
+     * @param application
+     */
+    private static void loadZookeeperAppConfig(String application){
+        try{
+            String appPath = BACK_SLANT + CONFIG_ROOT + BACK_SLANT + application;
+            if (!isExist(appPath)) {
+                return;
+            }
+            YouStandardConfig config = new YouStandardConfig();
+            GetChildrenBuilder childrenBuilder = CuratorClientFactory.getInstance().getChildren();
+            List<String> keys = childrenBuilder.forPath(appPath);
+
+            if (keys == null) {
+                keys = Lists.newArrayList();
+            }
+
+            for (String key : keys) {
+                byte[] data = CuratorClientFactory.getInstance().getData().forPath(appPath + BACK_SLANT + key);
+                String value = new String(data);
+                config.setProperty(key, value);
+            }
+        } catch (Exception e){
             e.printStackTrace();
         }
-
-        client = CuratorFrameworkFactory.newClient(zookeeperConfigAddress,  new ExponentialBackoffRetry(1000, 3));
-        client.start();
     }
-
-    protected static CuratorFramework getCuratorFrameworkClient(){
-        return client;
-    }
-
 
 
 }

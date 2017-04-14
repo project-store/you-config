@@ -42,7 +42,7 @@ public class ConfigNodeEventListener implements CuratorListener {
                         someChange = true;
                         break;
                     case NodeDataChanged:
-                        configApplication.getProperty(watchedEvent.getPath());
+//                        configApplication.getProperty(watchedEvent.getPath());
                         someChange = true;
                         break;
                     default:

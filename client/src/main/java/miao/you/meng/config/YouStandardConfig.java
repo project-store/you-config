@@ -1,14 +1,9 @@
 package miao.you.meng.config;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
-import org.apache.commons.configuration.ConversionException;
-import org.apache.commons.configuration.PropertyConverter;
-import org.apache.commons.lang.ObjectUtils;
+import miao.you.meng.commons.lang.LangUtils;
 
 import java.lang.reflect.Array;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -17,6 +12,8 @@ import java.util.*;
 public class YouStandardConfig implements Config {
 
     private final Map<String, Object> store = Maps.newLinkedHashMap();
+
+    private boolean throwExceptionOnMissing;
 
     @Override
     public boolean isEmpty() {
@@ -30,7 +27,7 @@ public class YouStandardConfig implements Config {
 
     @Override
     public Object getProperty(String key) {
-        return null;
+        return store.get(key);
     }
 
     @Override
@@ -50,11 +47,6 @@ public class YouStandardConfig implements Config {
 
     @Override
     public boolean getBoolean(String key) {
-        return false;
-    }
-
-    @Override
-    public boolean getBoolean(String key, boolean defaultValue) {
         Boolean b = getBoolean(key, null);
         if (b != null) {
             return b.booleanValue();
@@ -64,23 +56,27 @@ public class YouStandardConfig implements Config {
     }
 
     @Override
+    public boolean getBoolean(String key, boolean defaultValue) {
+        return getBoolean(key, defaultValue ? Boolean.TRUE : Boolean.FALSE).booleanValue();
+    }
+
+    @Override
     public Boolean getBoolean(String key, Boolean defaultValue) {
         Object value = resolveContainerStore(key);
-
         if (value == null) {
             return defaultValue;
         } else {
             try {
-                return PropertyConverter.toBoolean(interpolate(value));
-            } catch (ConversionException e) {
-                throw new ConversionException('\'' + key + "' doesn't map to a Boolean object", e);
+                return LangUtils.parseBoolean(value);
+            } catch (ClassCastException e) {
+                throw new NoSuchElementException('\'' + key + "' doesn't map to a Boolean object");
             }
         }
     }
 
     @Override
     public byte getByte(String key) {
-        Byte b = getByte(key, null).byteValue()
+        Byte b = getByte(key, null).byteValue();
         if (b != null) {
             return b.byteValue();
         } else {
@@ -95,7 +91,16 @@ public class YouStandardConfig implements Config {
 
     @Override
     public Byte getByte(String key, Byte defaultValue) {
-        return null;
+        Object value = resolveContainerStore(key);
+        if (value == null) {
+            return defaultValue;
+        } else {
+            try {
+                return LangUtils.parseByte(value);
+            } catch (ClassCastException e) {
+                throw new NoSuchElementException('\'' + key + "' doesn't map to a Boolean object");
+            }
+        }
     }
 
     @Override
@@ -115,7 +120,13 @@ public class YouStandardConfig implements Config {
 
     @Override
     public Double getDouble(String key, Double defaultValue) {
-        return null;
+        Object value = resolveContainerStore(key);
+
+        if (value == null) {
+            return defaultValue;
+        } else {
+            return LangUtils.parseDouble(value);
+        }
     }
 
     @Override
@@ -135,7 +146,13 @@ public class YouStandardConfig implements Config {
 
     @Override
     public Float getFloat(String key, Float defaultValue) {
-        return null;
+        Object value = resolveContainerStore(key);
+
+        if (value == null) {
+            return defaultValue;
+        } else {
+            return LangUtils.parseFloat(value);
+        }
     }
 
     @Override
@@ -150,18 +167,17 @@ public class YouStandardConfig implements Config {
 
     @Override
     public int getInt(String key, int defaultValue) {
-        Integer i = getInteger(key, null);
-
-        if (i == null) {
-            return defaultValue;
-        }
-
-        return i.intValue();
+        return getInteger(key, new Integer(defaultValue)).intValue();
     }
 
     @Override
     public Integer getInteger(String key, Integer defaultValue) {
-        return null;
+        Object value = resolveContainerStore(key);
+        if (value == null) {
+            return defaultValue;
+        } else {
+            return LangUtils.parseInt(value);
+        }
     }
 
     @Override
@@ -182,70 +198,11 @@ public class YouStandardConfig implements Config {
     @Override
     public Long getLong(String key, Long defaultValue) {
         Object value = resolveContainerStore(key);
-
         if (value == null) {
             return defaultValue;
         } else {
-            try {
-                return PropertyConverter.toLong(interpolate(value));
-            } catch (ConversionException e) {
-                throw new ConversionException('\'' + key + "' doesn't map to a Long object", e);
-            }
+            return LangUtils.parseLong(value);
         }
-    }
-
-    @Override
-    public short getShort(String key) {
-        Short s = getShort(key, null);
-        if (s != null) {
-            return s.shortValue();
-        } else {
-            throw new NoSuchElementException('\'' + key + "' doesn't map to an existing object");
-        }
-    }
-
-    @Override
-    public short getShort(String key, short defaultValue) {
-        return getShort(key, new Short(defaultValue)).shortValue();
-    }
-
-    @Override
-    public Short getShort(String key, Short defaultValue) {
-        return null;
-    }
-
-    @Override
-    public BigDecimal getBigDecimal(String key) {
-        BigDecimal number = getBigDecimal(key, null);
-        if (number != null) {
-            return number;
-        } else if (isThrowExceptionOnMissing()) {
-            throw new NoSuchElementException('\'' + key + "' doesn't map to an existing object");
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public BigDecimal getBigDecimal(String key, BigDecimal defaultValue) {
-        return null;
-    }
-
-    @Override
-    public BigInteger getBigInteger(String key) {
-        BigInteger number = getBigInteger(key, null);
-        if (number != null) {
-            return number;
-        } else if (isThrowExceptionOnMissing()) {
-            throw new NoSuchElementException('\'' + key + "' doesn't map to an existing object");
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public BigInteger getBigInteger(String key, BigInteger defaultValue) {
-        return null;
     }
 
     @Override
@@ -262,52 +219,18 @@ public class YouStandardConfig implements Config {
 
     @Override
     public String getString(String key, String defaultValue) {
-        return null;
-    }
+        Object value = resolveContainerStore(key);
 
-    @Override
-    public String[] getStringArray(String key) {
-        Object value = getProperty(key);
-
-        String[] array;
-
-        if (value instanceof String) {
-            array = new String[1];
-
-            array[0] = interpolate((String) value);
-        } else if (value instanceof List) {
-            List<?> list = (List<?>) value;
-            array = new String[list.size()];
-
-            for (int i = 0; i < array.length; i++) {
-                array[i] = interpolate(ObjectUtils.toString(list.get(i), null));
-            }
-        } else if (value == null) {
-            array = new String[0];
-        } else if (isScalarValue(value)) {
-            array = new String[1];
-            array[0] = value.toString();
+        if (value == null) {
+            return defaultValue;
+        } else if (value instanceof String) {
+            return value.toString();
         } else {
-            throw new ConversionException('\'' + key + "' doesn't map to a String/List object");
+            throw new ClassCastException('\'' + key + "' doesn't map to a String object");
         }
-        return array;
     }
 
-    @Override
-    public List<Object> getList(String key) {
-        return null;
-    }
-
-    @Override
-    public List<Object> getList(String key, List<Object> defaultValue) {
-        return null;
-    }
-
-    private boolean isThrowExceptionOnMissing() {
-        return true;
-    }
-
-    protected Object resolveContainerStore(String key) {
+    private Object resolveContainerStore(String key) {
         Object value = getProperty(key);
         if (value != null) {
             if (value instanceof Collection) {
@@ -317,22 +240,14 @@ public class YouStandardConfig implements Config {
                 value = Array.get(value, 0);
             }
         }
-
         return value;
     }
 
-    protected String interpolate(String base) {
-        Object result = interpolate((Object) base);
-        return (result == null) ? null : result.toString();
+    protected void setProperty(String key, Object value) {
+        store.put(key, value);
     }
 
-    protected Object interpolate(Object value)
-    {
-        return PropertyConverter.interpolate(value, this);
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(store);
+    public boolean isThrowExceptionOnMissing() {
+        return throwExceptionOnMissing;
     }
 }

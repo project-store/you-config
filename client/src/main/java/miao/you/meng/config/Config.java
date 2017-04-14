@@ -1,11 +1,6 @@
 package miao.you.meng.config;
 
-import org.apache.commons.configuration.ConversionException;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -68,7 +63,6 @@ public interface Config {
 
     int getInt(String key);
 
-
     int getInt(String key, int defaultValue);
 
     Integer getInteger(String key, Integer defaultValue);
@@ -77,41 +71,10 @@ public interface Config {
 
     long getLong(String key, long defaultValue);
 
-
     Long getLong(String key, Long defaultValue);
-
-
-    short getShort(String key);
-
-
-    short getShort(String key, short defaultValue);
-
-
-    Short getShort(String key, Short defaultValue);
-
-
-    BigDecimal getBigDecimal(String key);
-
-
-    BigDecimal getBigDecimal(String key, BigDecimal defaultValue);
-
-
-    BigInteger getBigInteger(String key);
-
-
-    BigInteger getBigInteger(String key, BigInteger defaultValue);
-
 
     String getString(String key);
 
-
     String getString(String key, String defaultValue);
 
-
-    String[] getStringArray(String key);
-
-    List<Object> getList(String key);
-
-
-    List<Object> getList(String key, List<Object> defaultValue);
 }
