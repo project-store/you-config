@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Created by miaoyoumeng on 2017/4/12.
  */
-public class YouStandardConfig implements Config {
+public class YouStandardConfig implements YouConfig {
 
     private final Map<String, Object> store = Maps.newLinkedHashMap();
 
@@ -245,6 +245,10 @@ public class YouStandardConfig implements Config {
 
     protected void setProperty(String key, Object value) {
         store.put(key, value);
+    }
+
+    protected void removeProperty(String key) {
+        store.remove(key);
     }
 
     public boolean isThrowExceptionOnMissing() {

@@ -6,7 +6,7 @@ package miao.you.meng.config.exception;
  * @author <a href="mailto:miaoyoumeng">Youmeng Miao </a>
  *
  */
-public class ConfigException extends Exception {
+public class ConfigException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
