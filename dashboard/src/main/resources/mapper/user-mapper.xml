@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="miao.you.meng.config.mapper.UserMapper">
+    <resultMap id="BaseResult" type="miao.you.meng.config.entity.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="role_id" property="roleId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="DATE"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="BaseColumn">
+        id,email,name,role_id,create_time,ts
+    </sql>
+
+    <select id="getUserById" resultMap="BaseResult">
+        select
+        <include refid="BaseColumn"/>
+        from users
+        where id=#{id}
+    </select>
+</mapper>

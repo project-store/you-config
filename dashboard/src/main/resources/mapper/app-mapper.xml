@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="miao.you.meng.config.mapper.AppMapper">
+    <resultMap id="BaseResultMap" type="miao.you.meng.config.entity.AppInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="business" property="business" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="DATE"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="BaseColumn">
+        id,name,business,description,create_time,email,ts
+    </sql>
+
+    <select id="countAppInfo" resultType="java.lang.Integer">
+        select count(id) from app where is_delete != 1
+    </select>
+
+    <select id="listAppInfo" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumn"/>
+        from app where is_delete != 1
+        order by name
+    </select>
+
+    <select id="getNameById" resultType="java.lang.String">
+        select name
+        from app
+        where id=#{id}
+    </select>
+
+    <select id="findAppInfoByName" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumn"/>
+        from app
+        where name = #{name} and is_delete != 1
+    </select>
+
+    <insert id="addAppInfo">
+        insert into app
+        <trim prefix="(" suffix=")">
+            name,business,description,create_time,email
+        </trim>
+        <trim prefix="values (" suffix=")">
+            #{app.name},#{app.business},#{app.description},#{app.createTime},#{app.email}
+        </trim>
+    </insert>
+
+    <update id="updateAppInfo">
+        update app
+        set business=#{business},description=#{description},email=#{email}
+        where id=#{id}
+    </update>
+
+</mapper>

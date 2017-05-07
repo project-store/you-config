@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="miao.you.meng.config.mapper.RoleMapper">
+    <resultMap id="BaseResult" type="miao.you.meng.config.entity.Role">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="DATE"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <resultMap id="SecondResult" type="miao.you.meng.config.entity.RoleResource">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="role_id" property="roleId" jdbcType="INTEGER"/>
+        <result column="url_pattern" property="urlPattern" jdbcType="VARCHAR"/>
+        <result column="url_description" property="urlDescription" jdbcType="VARCHAR"/>
+        <result column="method_mask" property="methodMask" jdbcType="INTEGER"/>
+        <result column="env_id" property="envId" jdbcType="INTEGER"/>
+        <result column="config_type" property="configType" jdbcType="INTEGER"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <sql id="BaseColumn">
+        id,name,update_by,create_by,create_time,ts
+    </sql>
+
+    <sql id="SecondColumn">
+        id,role_id,url_pattern,url_description,method_mask,env_id,config_type,ts
+    </sql>
+    
+    <select id="getRoleById" resultMap="BaseResult">
+        select 
+        <include refid="BaseColumn"/>
+        from role
+        where id=#{id}
+    </select>
+
+    <select id="getResourceByRoleId" resultMap="SecondResult">
+        select
+        <include refid="SecondColumn"/>
+        from role_resource
+        where role_id=#{role_id} and url_pattern like concat(concat('%', #{url}), '%')
+    </select>
+
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="miao.you.meng.config.mapper.ConfigMapper">
+    <resultMap id="BaseResultMap" type="miao.you.meng.config.entity.AppConfig">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <result column="app_id" property="appId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="DATE"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="SecondResultMap" type="miao.you.meng.config.entity.ConfigHistory">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="config_id" property="configId" jdbcType="INTEGER"/>
+        <result column="old_value" property="oldValue" jdbcType="VARCHAR"/>
+        <result column="new_value" property="newValue" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="DATE"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="BaseColumn">
+        id,deleted,name,value,app_id,create_time,description,ts
+    </sql>
+
+    <sql id="SecondColumn">
+        id,config_id,old_value,new_value,create_time,ts
+    </sql>
+
+    <select id="listConfig" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumn"/>
+        from config
+        where app_id=#{appId} and deleted != 1
+        order by name
+    </select>
+
+    <select id="findConfigById" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumn"/>
+        from config
+        where id=#{id}
+    </select>
+
+    <select id="findConfigByNameAndAId" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumn"/>
+        from config
+        where name like concat(concat('%',#{name}),'%') and app_id=#{appId} and deleted=1
+    </select>
+
+    <insert id="insertConfigHistory">
+        insert into config_history
+        <trim prefix="(" suffix=")">
+            config_id,old_value,new_value,create_time
+        </trim>
+        <trim prefix="values (" suffix=")">
+            #{configHistory.configId},#{configHistory.oldValue},#{configHistory.newValue},#{configHistory.createTime}
+        </trim>
+    </insert>
+
+    <insert id="addParam">
+        insert into config
+        <trim prefix="(" suffix=")">
+            name,value,app_id,create_time,description
+        </trim>
+        <trim prefix="values (" suffix=")">
+            #{config.name},#{config.value},#{config.appId},#{config.createTime},#{config.description}
+        </trim>
+    </insert>
+
+    <update id="saveParam">
+        update config
+        set description=#{description}, value=#{value}
+        where id=#{id}
+    </update>
+</mapper>

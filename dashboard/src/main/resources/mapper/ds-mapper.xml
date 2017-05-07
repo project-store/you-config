@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="miao.you.meng.config.mapper.DataSourceMapper">
+    <resultMap id="BaseResult" type="miao.you.meng.config.entity.DataSource">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="app_name" property="appName" jdbcType="VARCHAR"/>
+        <result column="ds_json" property="dsJson" jdbcType="LONGVARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="DATE"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="BaseColumn">
+        id,app_name,ds_json,create_time,ts
+    </sql>
+
+    <select id="listDataSource" resultMap="BaseResult">
+        select
+        <include refid="BaseColumn"/>
+        from ds
+        order by app_name
+    </select>
+
+    <select id="findDSByName" resultMap="BaseResult">
+        select
+        <include refid="BaseColumn"/>
+        from ds
+        where app_name like concat(concat('%', #{appName}), '%')
+    </select>
+
+    <select id="searchJson" resultType="java.lang.String">
+        select ds_json
+        from ds
+        where id=#{id}
+    </select>
+
+    <insert id="addParam">
+        insert into ds
+        <trim prefix="(" suffix=")">
+            app_name,ds_json,create_time
+        </trim>
+        <trim prefix="values (" suffix=")">
+            #{ds.appName},#{ds.dsJson},#{ds.createTime}
+        </trim>
+    </insert>
+
+    <update id="alertJson">
+        update ds
+        set ds_json=#{dsJson}
+        where id=#{id}
+    </update>
+
+</mapper>
