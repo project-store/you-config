@@ -9,11 +9,16 @@ import java.util.Date;
  */
 public class DataSource implements Serializable {
     private static final long serialVersionUID = 7978242819178704541L;
+
     private int id;
-    private String appName;
-    private String dsJson;
+
+    private int appId;
+
+    private String connectionPool;
+
     private Date createTime;
-    private Timestamp ts;
+
+    private Date ts;
 
     public int getId() {
         return id;
@@ -23,20 +28,20 @@ public class DataSource implements Serializable {
         this.id = id;
     }
 
-    public String getAppName() {
-        return appName;
+    public int getAppId() {
+        return appId;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public void setAppId(int appId) {
+        this.appId = appId;
     }
 
-    public String getDsJson() {
-        return dsJson;
+    public String getConnectionPool() {
+        return connectionPool;
     }
 
-    public void setDsJson(String dsJson) {
-        this.dsJson = dsJson;
+    public void setConnectionPool(String connectionPool) {
+        this.connectionPool = connectionPool;
     }
 
     public Date getCreateTime() {
@@ -47,11 +52,11 @@ public class DataSource implements Serializable {
         this.createTime = createTime;
     }
 
-    public Timestamp getTs() {
+    public Date getTs() {
         return ts;
     }
 
-    public void setTs(Timestamp ts) {
+    public void setTs(Date ts) {
         this.ts = ts;
     }
 }

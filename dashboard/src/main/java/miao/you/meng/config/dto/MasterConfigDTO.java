@@ -9,11 +9,9 @@ import java.util.Map;
 /**
  * Created by miaoyoumeng on 2017/5/7.
  */
-public class MasterConfigDTO implements Serializable {
+public class MasterConfigDTO extends DataSourceConfigDTO {
 
     private static final long serialVersionUID = -133196553140824900L;
-
-    private Map<String, String> config = Maps.newConcurrentMap();
 
     private final String type = MySQL.MASTER.toString();
 

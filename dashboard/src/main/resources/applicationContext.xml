@@ -11,8 +11,7 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="miao.you.meng.config"/>
-    <context:component-scan base-package="miao.you.meng.config.model"/>
+    <context:component-scan base-package="miao.you.meng.config.dashboard.controller"/>
 
     <!--<import resource="applicationContext-service-config.xml"/>-->
     <bean id="client" class="miao.you.meng.config.spring.ZookeeperClientFactoryBean" >

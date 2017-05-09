@@ -15,19 +15,21 @@ public class DataSourceDTO implements Serializable {
 
     private int id;
 
+    private int AppId;
+
     private String appName;
 
     private String url;
 
     private String host;
 
+    private String port;
+
     private String userName;
 
     private String password;
 
-    private Date createTime;
-
-    private Date ts;
+    private Date updateTime;
 
     public int getId() {
         return id;
@@ -35,6 +37,14 @@ public class DataSourceDTO implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getAppId() {
+        return AppId;
+    }
+
+    public void setAppId(int appId) {
+        AppId = appId;
     }
 
     public String getAppName() {
@@ -61,28 +71,12 @@ public class DataSourceDTO implements Serializable {
         this.host = host;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPort() {
+        return port;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getTs() {
-        return ts;
-    }
-
-    public void setTs(Date ts) {
-        this.ts = ts;
+    public void setPort(String port) {
+        this.port = port;
     }
 
     public String getUserName() {
@@ -91,5 +85,21 @@ public class DataSourceDTO implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

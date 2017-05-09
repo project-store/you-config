@@ -80,19 +80,17 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <#list list as list>
-                            <tr id="dsId_${list.id}">
-                                <td name="appId">${list.id!''}</td>
-                                <td name="appName">${list.appName!''}</td>
-                                <td>${list.host!''}</td>
-                                <td>${list.url!''}</td>
-                                <td>${list.userName!''}</td>
-                                <td>${list.password!''}</td>
-                                <td>${list.ts?string("yyyy-MM-dd HH:mm")}</td>
+                            <#list list as item>
+                            <tr id="dsId_${item.id}">
+                                <td name="appId">${item.id!''}</td>
+                                <td name="appName">${item.appName!''}</td>
+                                <td>${item.host!''}</td>
+                                <td>${item.url!''}</td>
+                                <td>${item.userName!''}</td>
+                                <td>${item.password!''}</td>
+                                <td>${item.updateTime?string("yyyy-MM-dd HH:mm")}</td>
                                 <td>
-                                    <button class="btn btn-primary" data-toggle="modal" onclick="jump(this)">
-                                        查看
-                                    </button>
+                                    <a href= "/datasource/config/detail/${item.id!!''}" class="btn btn-primary" role="button">&nbsp;&nbsp; 查看 &nbsp;&nbsp;</a>
                                 </td>
                             </tr>
                             </#list>
@@ -153,11 +151,5 @@
         })
     })
 
-    /*跳转到master 和 slave 列表页面*/
-    function jump(ele){
-        var id = $(ele).parent().parent().find("td[name=appId]").text();
-        var appName = $(ele).parent().parent().find("td[name=appName]").text();
-        window.location.href="/ds/detail/trunk?id=" + id + "&appName=" + appName;
-    }
 </script>
 </@page>

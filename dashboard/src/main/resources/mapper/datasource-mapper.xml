@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="miao.you.meng.config.mapper.DataSourceMapper">
-    <resultMap id="BaseResult" type="miao.you.meng.config.entity.DataSource">
+    <resultMap id="BaseResult" type="miao.you.meng.config.dto.DataSourceDTO">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="app_name" property="appName" jdbcType="VARCHAR"/>
-        <result column="ds_json" property="dsJson" jdbcType="LONGVARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="connection_pool" property="connectionPool" jdbcType="LONGVARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="DATE"/>
-        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
+        <result column="ts" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="BaseColumn">
-        id,app_name,ds_json,create_time,ts
+        id,app_id,type,connection_pool,create_time,ts
     </sql>
 
     <select id="listDataSource" resultMap="BaseResult">
-        select
-        <include refid="BaseColumn"/>
-        from ds
+        SELECT
+        ds.id,
+        ds.app_id,
+        app.`name` as app_name,
+        ds.connection_pool,
+        ds.ts
+        FROM
+            data_source ds,
+            app
+        WHERE
+            ds.app_id = app.id
+        AND ds.type = 'master'
         order by app_name
     </select>
 
     <select id="findDSByName" resultMap="BaseResult">
         select
         <include refid="BaseColumn"/>
-        from ds
+        from data_source
         where app_name like concat(concat('%', #{appName}), '%')
+    </select>
+    <select id="findDataSourceById" resultMap="BaseResult">
+        select
+        <include refid="BaseColumn"/>
+        from data_source
+        where id=#{id}
     </select>
 
     <select id="searchJson" resultType="java.lang.String">
         select ds_json
-        from ds
+        from data_source
         where id=#{id}
     </select>
 
@@ -44,7 +60,7 @@
     </insert>
 
     <update id="alertJson">
-        update ds
+        update data_source
         set ds_json=#{dsJson}
         where id=#{id}
     </update>

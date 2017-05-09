@@ -1,5 +1,6 @@
 package miao.you.meng.config.service.impl;
 
+import miao.you.meng.config.dto.DataSourceDTO;
 import miao.you.meng.config.entity.DataSource;
 import miao.you.meng.config.mapper.DataSourceMapper;
 import miao.you.meng.config.service.IDataSourceService;
@@ -20,10 +21,10 @@ public class DataSourceServiceImpl implements IDataSourceService {
      * 罗列所有数据源
      */
     @Override
-    public List<DataSource> listDS(){
-        List<DataSource> list = dsMapper.listDataSource();
-        if (list == null){
-            return new ArrayList<DataSource>();
+    public List<DataSourceDTO> listDS() {
+        List<DataSourceDTO> list = dsMapper.listDataSource();
+        if (list == null) {
+            return new ArrayList<DataSourceDTO>();
         }
         return list;
     }
@@ -32,7 +33,7 @@ public class DataSourceServiceImpl implements IDataSourceService {
      * 增加数据源
      */
     @Override
-    public int addParam(DataSource ds){
+    public int addParam(DataSource ds) {
         dsMapper.addParam(ds);
         return 0;
     }
@@ -41,8 +42,17 @@ public class DataSourceServiceImpl implements IDataSourceService {
      * 通过appName 找具体的数据源
      */
     @Override
-    public DataSource findDSByName(String appName){
+    public DataSource findDSByName(String appName) {
         DataSource ds = dsMapper.findDSByName(appName);
+        return ds;
+    }
+
+    /**
+     * 通过appName 找具体的数据源
+     */
+    @Override
+    public DataSource findDataSourceById(int id) {
+        DataSource ds = dsMapper.findDataSourceById(id);
         return ds;
     }
 
@@ -50,7 +60,7 @@ public class DataSourceServiceImpl implements IDataSourceService {
      * 通过id找出json格式的数据源配置
      */
     @Override
-    public String searchJson(int id){
+    public String searchJson(int id) {
         String s = dsMapper.searchJson(id);
         return s;
     }
@@ -59,7 +69,7 @@ public class DataSourceServiceImpl implements IDataSourceService {
      * 更改具体数据源的配置
      */
     @Override
-    public int alertJson(int id, String dsJson){
+    public int alertJson(int id, String dsJson) {
         dsMapper.alertJson(id, dsJson);
         return 0;
     }
