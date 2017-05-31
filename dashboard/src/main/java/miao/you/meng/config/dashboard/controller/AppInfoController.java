@@ -3,7 +3,7 @@ package miao.you.meng.config.dashboard.controller;
 import com.google.common.collect.Lists;
 import miao.you.meng.config.auth.AuthPassport;
 import miao.you.meng.config.constants.AuthControl;
-import miao.you.meng.config.constants.BusinessType;
+import miao.you.meng.config.enumeration.BusinessEnum;
 import miao.you.meng.config.entity.AppInfo;
 import miao.you.meng.config.constants.HttpResponseCode;
 import miao.you.meng.config.factory.EntityFactory;
@@ -48,7 +48,7 @@ public class AppInfoController {
         List<AppInfo> appList = appService.listApp();
         modelMap.addAttribute("appList", appList);
         List<Pair> businessList = Lists.newArrayList();
-        for (BusinessType business : BusinessType.values()) {
+        for (BusinessEnum business : BusinessEnum.values()) {
             Pair pair = new ImmutablePair(business.getValue(), business.getName());
             businessList.add(pair);
         }

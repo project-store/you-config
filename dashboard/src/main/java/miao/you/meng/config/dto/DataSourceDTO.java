@@ -1,5 +1,7 @@
 package miao.you.meng.config.dto;
 
+import miao.you.meng.config.enumeration.MySQLRole;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -30,6 +32,9 @@ public class DataSourceDTO implements Serializable {
     private String password;
 
     private Date updateTime;
+
+    private MySQLRole type;
+
 
     public int getId() {
         return id;

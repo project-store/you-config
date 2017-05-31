@@ -8,8 +8,8 @@ package miao.you.meng.config.constants;
  */
 public interface ResponseCode {
 
-
+    //成功
     int SUCCESS = 0;
-
+   
     int FAIL  = 1;
 }

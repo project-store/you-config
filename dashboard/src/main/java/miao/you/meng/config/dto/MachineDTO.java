@@ -6,6 +6,7 @@ package miao.you.meng.config.dto;
  * master 和 slave 的dto
  */
 public class MachineDTO {
+
     private String machine;
     private String host;
     private String url;

@@ -1,4 +1,4 @@
-package miao.you.meng.config.constants;
+package miao.you.meng.config.enumeration;
 
 
 /**
@@ -6,7 +6,7 @@ package miao.you.meng.config.constants;
  *
  * 开发组列表
  */
-public enum BusinessType {
+public enum BusinessEnum {
 
 
     DEVELOP_1(1, "应用开发"),
@@ -15,7 +15,7 @@ public enum BusinessType {
     private int value;
     private String name;
 
-    BusinessType(int value, String name) {
+    BusinessEnum(int value, String name) {
         this.value = value;
         this.name = name;
     }

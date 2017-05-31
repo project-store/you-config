@@ -3,20 +3,28 @@ package miao.you.meng.config.dashboard.controller;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import miao.you.meng.config.auth.AuthPassport;
-import miao.you.meng.config.constants.AuthControl;
-import miao.you.meng.config.constants.Constants;
-import miao.you.meng.config.constants.HttpResponseCode;
+import miao.you.meng.config.constants.*;
+import miao.you.meng.config.dto.DataSourceConfigDTO;
 import miao.you.meng.config.dto.DataSourceDTO;
 import miao.you.meng.config.dto.MachineDTO;
 import miao.you.meng.config.dto.DataSourceConfigCompareDTO;
+import miao.you.meng.config.dto.mysql.MasterConfigDTO;
+import miao.you.meng.config.dto.mysql.MySQLClusterDTO;
+import miao.you.meng.config.dto.mysql.SlaveConfigDTO;
 import miao.you.meng.config.entity.AppInfo;
 import miao.you.meng.config.entity.DataSource;
+import miao.you.meng.config.exception.ConfigException;
 import miao.you.meng.config.model.JsonResponse;
 import miao.you.meng.config.service.IAppService;
 import miao.you.meng.config.service.IDataSourceService;
 import miao.you.meng.config.util.JsonUtil;
 import miao.you.meng.config.util.YamlUtil;
 import miao.you.meng.config.util.ZookeeperUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,15 +75,110 @@ public class DataSourceController {
             Map<String, String> mapKey = Maps.newConcurrentMap();
             dataSource.setUpdateTime(ds.getUpdateTime());
             dataSource.setId(ds.getId());
-            dataSource.setHost(mapKey.get("host"));
-            dataSource.setPort(mapKey.get("port"));
-            dataSource.setUrl(mapKey.get("url"));
-            dataSource.setPassword(mapKey.get("password"));
-            dataSource.setUserName(mapKey.get("username"));
+            dataSource.setHost(mapKey.get(MySQLKey.HOST));
+            dataSource.setPort(mapKey.get(MySQLKey.PORT));
+            dataSource.setUrl(mapKey.get(MySQLKey.URL));
+            dataSource.setPassword(mapKey.get(MySQLKey.PASSWORD));
+            dataSource.setUserName(mapKey.get(MySQLKey.USERNAME));
         }
+
         modelMap.addAttribute("list", dsList);
         modelMap.addAttribute("appList", appList);
         return "/ds/list_dataSource";
+    }
+
+    /**
+     * 解析xml字符串，获取数据源
+     * @param xmlString
+     */
+    private MySQLClusterDTO parseDataSource(String xmlString) {
+
+        if (StringUtils.isBlank(xmlString)) {
+            return null;
+        }
+        Document document = null;
+        try {
+            document = DocumentHelper.parseText(xmlString);
+        } catch (DocumentException e) {
+            logger.error("dom4j parse exception {}", e);
+        }
+        if (document != null) {
+            MySQLClusterDTO cluster = new MySQLClusterDTO();
+            Element root = document.getRootElement();
+
+            List<Element> configList = root.elements();
+            if (configList == null || configList.isEmpty()) {
+                return null;
+            }
+            for (Element element : configList) {
+                //master 配置节点
+                if(XMLNodeName.MASTER.equals(element.getName())) {
+                    MasterConfigDTO master  = parseMaster(element);
+                    cluster.setMaster(master);
+                } else if(XMLNodeName.SLAVE.equals(element.getName())){
+                    SlaveConfigDTO slave = parseSlave(element);
+                    cluster.addSlave(slave);
+                }
+            }
+            root.getQName(XMLNodeName.MASTER);
+
+            return cluster;
+        }
+        return null;
+    }
+
+    /**
+     * 读取主节点配置
+     * @param masterConfig
+     * @return
+     */
+    private MasterConfigDTO parseMaster(Element masterConfig) {
+        List<Element> configList = masterConfig.elements();
+        if (configList == null || configList.isEmpty()) {
+            return null;
+        }
+        MasterConfigDTO master = new MasterConfigDTO();
+        parseDataSourceConnectionPool(masterConfig, master);
+        return master;
+    }
+
+    /**
+     * 读取从节点配置
+     * @param slaveConfig
+     * @return
+     */
+    private SlaveConfigDTO parseSlave(Element slaveConfig) {
+        List<Element> configList = slaveConfig.elements();
+        if (configList == null || configList.isEmpty()) {
+            return null;
+        }
+        SlaveConfigDTO slave = new SlaveConfigDTO();
+        parseDataSourceConnectionPool(slaveConfig, slave);
+        return slave;
+    }
+
+    /**
+     * 解析数据源配置
+     * @param element
+     * @param config
+     */
+    private void parseDataSourceConnectionPool(Element element, DataSourceConfigDTO config) {
+        List<Element> configList = element.elements();
+        if (configList == null || configList.isEmpty()) {
+            return;
+        }
+        MasterConfigDTO master = new MasterConfigDTO();
+        for (Element child : configList) {
+            //master 配置节点
+            Map<String, String> map = Maps.newConcurrentMap();
+            String key = element.getName();
+            String value = element.getText().trim();
+
+            if (StringUtils.isNoneBlank(value)) {
+                map.put(key, value);
+            }
+            master.setConnectionPool(map);
+        }
     }
 
     /**

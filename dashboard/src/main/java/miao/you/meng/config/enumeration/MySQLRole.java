@@ -1,9 +1,10 @@
-package miao.you.meng.config.constants;
+package miao.you.meng.config.enumeration;
 
 /**
+ * 数据库角色
  * Created by miaoyoumeng on 2017/5/7.
  */
-public enum MySQL {
+public enum MySQLRole {
 
     MASTER("master"),
 
@@ -11,7 +12,7 @@ public enum MySQL {
 
     private String value;
 
-    MySQL(String type){
+    MySQLRole(String type){
         this.value = type;
     }
 
