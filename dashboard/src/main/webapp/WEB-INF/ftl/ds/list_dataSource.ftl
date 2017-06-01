@@ -18,7 +18,7 @@
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">
-                        <button class="btn btn-success btn-sm add icon" data-toggle="modal" data-target="#secondModal">
+                        <button class="btn btn-success btn-sm add icon" data-toggle="modal" data-target="#insertModalLabel">
                             + &nbsp新增
                         </button>
                     </h3>
@@ -26,41 +26,43 @@
                 <!-- 新增框 -->
                 <div class="modal fade" id="secondModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index:1100;">
                     <div class="modal-dialog" style="width:450px">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                    &times;
-                                </button>
-                                <br/>
-                                <h4 class="modal-title" id="myModalLabel">
-                                    <div class="form-group form-inline">
-                                        <label for="name">&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;字&nbsp;:</label>
-                                        <input type="text" class="form-control" style="width:300px" id="newAppName">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url:</label>
-                                        <input type="text" class="form-control" style="width:300px" id="newUrl">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="name">&nbsp;&nbsp;&nbsp;&nbsp;Host&nbsp;:</label>
-                                        <input type="text" class="form-control" style="width:300px" id="newHost">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="name">&nbsp;用&nbsp;&nbsp;户&nbsp;:</label>
-                                        <input type="text" class="form-control" style="width:300px" id="newUserName">
-                                    </div>
-                                    <div class="form-group form-inline">
-                                        <label for="name">&nbsp;&nbsp;&nbsp;密&nbsp;码&nbsp;:</label>
-                                        <input type="text" class="form-control" style="width:300px" id="newPassword">
-                                    </div>
-                                </h4>
+                        <form action="/ds/add" method="post" >
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                    <br/>
+                                    <h4 class="modal-title" id="insertModalLabel">
+                                        <div class="form-group form-inline">
+                                            <label for="name">&nbsp;名字&nbsp;:</label>
+                                            <input type="text" name="appName" class="form-control" style="width:300px">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="name">&nbsp;&nbsp;URL&nbsp;:</label>
+                                            <input type="text" name="url" class="form-control" style="width:300px">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="name">&nbsp;Host&nbsp;:</label>
+                                            <input type="text" name="host" class="form-control" style="width:300px">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="name">&nbsp;用户&nbsp;:</label>
+                                            <input type="text" name="userName" class="form-control" style="width:300px">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="name">&nbsp;密码&nbsp;:</label>
+                                            <input type="text" name="password" class="form-control" style="width:300px">
+                                        </div>
+                                    </h4>
+                                </div>
+                                <input type="hidden" value="" id="configId"/>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" name="addNewDS" >新增</button>
+                                </div>
                             </div>
-                            <input type="hidden" value="" id="configId"/>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                <button type="button" class="btn btn-primary" name="addNewDS" >新增</button>
-                            </div>
-                        </div>
+                        </form>
                     </div><!-- 新增框 -->
                 </div>
 
@@ -106,6 +108,7 @@
 <script>
     /*新增数据*/
     $('button[name=addNewDS]').click(function(){
+        $("#insertModalLabel").
         var appName = $('#newAppName').val();
         var url = $('#newUrl').val();
         var Host = $('#newHost').val();
@@ -134,7 +137,7 @@
         jsonData.password = password;
         jsonData.userName = userName;
         $.ajax({
-            url: "/ds/add/trunk-env/",
+            url: "/ds/add",
             type: "post",
             data: jsonData,
             dataType: "json",

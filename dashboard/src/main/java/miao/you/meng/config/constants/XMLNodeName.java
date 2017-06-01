@@ -7,6 +7,7 @@ public interface XMLNodeName {
 
     String MASTER = "master";
     String SLAVE = "slave";
+    String CONFIG = "config";
 
 
     String POOL_PREPARED_STATEMKLBS = "poolPreparedStatemklbs";

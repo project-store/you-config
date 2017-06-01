@@ -30,10 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -163,7 +160,12 @@ public class DataSourceController {
      * @param config
      */
     private void parseDataSourceConnectionPool(Element element, DataSourceConfigDTO config) {
-        List<Element> configList = element.elements();
+
+        Element configEle = element.element(XMLNodeName.CONFIG);
+        if (configEle == null) {
+            return;
+        }
+        List<Element> configList = configEle.elements();
         if (configList == null || configList.isEmpty()) {
             return;
         }
@@ -192,9 +194,11 @@ public class DataSourceController {
      */
     @AuthPassport(insert = AuthControl.INSERT)
     @ResponseBody
-    @RequestMapping("/add/trunk-env")
-    public JsonResponse addParam(@RequestParam("appName") String appName, @RequestParam("url") String url, @RequestParam("host") String host,
-                                 @RequestParam("password") String password, @RequestParam("userName") String userName) {
+    @RequestMapping(method = RequestMethod.POST, value = "/add")
+    public JsonResponse addParam(@RequestParam("appName") String appName,
+                                 @RequestParam("url") String url, @RequestParam("host") String host,
+                                 @RequestParam("password") String password,
+                                 @RequestParam("userName") String userName) {
         JsonResponse response = new JsonResponse();
 
         return response;
