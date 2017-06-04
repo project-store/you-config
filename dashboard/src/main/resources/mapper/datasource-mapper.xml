@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="miao.you.meng.config.mapper.DataSourceMapper">
-    <resultMap id="BaseResult" type="miao.you.meng.config.dto.DataSourceDTO">
+    <resultMap id="BaseResult" type="miao.you.meng.config.entity.DataSource">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="app_name" property="appName" jdbcType="VARCHAR"/>
-        <result column="type" property="type" jdbcType="VARCHAR"/>
-        <result column="connection_pool" property="connectionPool" jdbcType="LONGVARCHAR"/>
+        <result column="config" property="config" jdbcType="LONGVARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="DATE"/>
-        <result column="ts" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="BaseColumn">
-        id,app_id,type,connection_pool,create_time,ts
+        id, app_name, config, create_time, ts
     </sql>
 
     <select id="listDataSource" resultMap="BaseResult">
         SELECT
-        ds.id,
-        ds.app_id,
-        app.`name` as app_name,
-        ds.connection_pool,
-        ds.ts
+        <include refid="BaseColumn"/>
         FROM
-            data_source ds,
-            app
-        WHERE
-            ds.app_id = app.id
-        AND ds.type = 'master'
+            data_source
         order by app_name
     </select>
 
-    <select id="findDSByName" resultMap="BaseResult">
+    <select id="findDataSourceByName" resultMap="BaseResult">
         select
         <include refid="BaseColumn"/>
         from data_source
@@ -43,25 +34,25 @@
         where id=#{id}
     </select>
 
-    <select id="searchJson" resultType="java.lang.String">
-        select ds_json
+    <select id="getConfigXmlById" resultType="java.lang.String">
+        select config
         from data_source
         where id=#{id}
     </select>
 
-    <insert id="addParam">
-        insert into ds
+    <insert id="insertDataSource">
+        insert into data_source
         <trim prefix="(" suffix=")">
-            app_name,ds_json,create_time
+            app_name,config,create_time
         </trim>
         <trim prefix="values (" suffix=")">
-            #{ds.appName},#{ds.dsJson},#{ds.createTime}
+            #{ds.appName},#{ds.config},#{ds.createTime}
         </trim>
     </insert>
 
-    <update id="alertJson">
+    <update id="updateDataSource">
         update data_source
-        set ds_json=#{dsJson}
+        set config=#{config}
         where id=#{id}
     </update>
 

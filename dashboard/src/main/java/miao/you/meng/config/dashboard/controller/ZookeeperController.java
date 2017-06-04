@@ -8,7 +8,7 @@ import miao.you.meng.config.constants.HttpResponseCode;
 import miao.you.meng.config.model.JsonResponse;
 import miao.you.meng.config.service.IAppService;
 import miao.you.meng.config.service.IConfigService;
-import miao.you.meng.config.util.ZookeeperUtil;
+import miao.you.meng.config.service.IZookeeperService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +37,9 @@ public class ZookeeperController {
     @Autowired
     private IConfigService configService;
 
+    @Autowired
+    private IZookeeperService zookeeperService;
+
     /**
      * app页面中更新单个zookeeper的值
      */
@@ -48,8 +51,9 @@ public class ZookeeperController {
                                          @RequestParam("configValue") String configValue){
         JsonResponse jsonResponse = new JsonResponse();
         String appName = appService.getNameById(appId);
-        String nodePath = ZookeeperUtil.getNodePath(appName, StringUtils.trimToEmpty(configName));
-        int flag = ZookeeperUtil.reflushNode(nodePath, configValue);
+        String nodePath = this.zookeeperService.getNodePath(appName, StringUtils.trimToEmpty(configName));
+
+        int flag = this.zookeeperService.refreshNode(nodePath, configValue);
 
         if (flag == 0){
             jsonResponse.setCode(HttpResponseCode.SUCCESS);
@@ -66,14 +70,14 @@ public class ZookeeperController {
      */
     @AuthPassport(update = AuthControl.UPDATE)
     @ResponseBody
-    @RequestMapping("/reflush/all")
+    @RequestMapping("/refresh/all")
     public JsonResponse reflushAllZookeeper(@RequestParam("appId") int appId){
         String appName = appService.getNameById(appId);
         List<AppConfig> configList = configService.listAppConfig(appId);
         boolean flag = true;
         for (AppConfig config : configList){
-            String nodePath = ZookeeperUtil.getNodePath(appName, StringUtils.trimToEmpty(config.getName()));
-            int tk = ZookeeperUtil.reflushNode(nodePath, StringUtils.trimToEmpty(config.getValue()));
+            String nodePath = this.zookeeperService.getNodePath(appName, StringUtils.trimToEmpty(config.getName()));
+            int tk = this.zookeeperService.refreshNode(nodePath, StringUtils.trimToEmpty(config.getValue()));
             if (tk != 0){
                 flag = false;
             }
@@ -104,9 +108,8 @@ public class ZookeeperController {
             zooMysqlListDTO.setId(config.getId());
             zooMysqlListDTO.setName(config.getName());
             zooMysqlListDTO.setMysqlValue(config.getValue());
-            String nodePath = ZookeeperUtil.getNodePath(appName, config.getName());
-            logger.info("nodePath : [{}]  data : [{}] ", nodePath , ZookeeperUtil.readNode(nodePath));
-            zooMysqlListDTO.setZooValue(ZookeeperUtil.readNode(nodePath));
+            String value = this.zookeeperService.getAppConfigNode(appName, config.getName());
+            zooMysqlListDTO.setZooValue(value);
             zooMysqlListDTOList.add(zooMysqlListDTO);
         }
         modelMap.addAttribute("appId", appId);

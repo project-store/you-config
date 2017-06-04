@@ -14,5 +14,12 @@ public class SlaveConfigDTO extends DataSourceConfigDTO {
 
     private final String type = MySQLRole.SLAVE.toString();
 
+    public String getType() {
+        return type;
+    }
+
+    public String getDisplayName(){
+        return type;
+    }
 
 }

@@ -12,7 +12,11 @@ public interface Constants {
 
     String APP_CONFIG_ROOT = BACK_SLANT + APP_CONFIG_ROOT_NODE_NAME;
 
+    String DATASOURCE_CONFIG_ROOT_NODE_NAME = "DataSource";
 
+    String DATASOURCE_CONFIG_NODE_NAME = "config";
+
+    String DATASOURCE_CONFIG_ROOT = BACK_SLANT + DATASOURCE_CONFIG_ROOT_NODE_NAME;
 
     String DS_ROOT = "DataSource";
 

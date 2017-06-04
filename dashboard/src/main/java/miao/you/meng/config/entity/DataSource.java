@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 /**
+ * 数据源实体
  * Created by Administrator on 2017/4/25.
  */
 public class DataSource implements Serializable {
@@ -12,9 +13,9 @@ public class DataSource implements Serializable {
 
     private int id;
 
-    private int appId;
+    private String  appName;
 
-    private String connectionPool;
+    private String config;
 
     private Date createTime;
 
@@ -28,20 +29,20 @@ public class DataSource implements Serializable {
         this.id = id;
     }
 
-    public int getAppId() {
-        return appId;
+    public String getAppName() {
+        return appName;
     }
 
-    public void setAppId(int appId) {
-        this.appId = appId;
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
-    public String getConnectionPool() {
-        return connectionPool;
+    public String getConfig() {
+        return config;
     }
 
-    public void setConnectionPool(String connectionPool) {
-        this.connectionPool = connectionPool;
+    public void setConfig(String config) {
+        this.config = config;
     }
 
     public Date getCreateTime() {

@@ -17,8 +17,6 @@ public class DataSourceDTO implements Serializable {
 
     private int id;
 
-    private int AppId;
-
     private String appName;
 
     private String url;
@@ -42,14 +40,6 @@ public class DataSourceDTO implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getAppId() {
-        return AppId;
-    }
-
-    public void setAppId(int appId) {
-        AppId = appId;
     }
 
     public String getAppName() {

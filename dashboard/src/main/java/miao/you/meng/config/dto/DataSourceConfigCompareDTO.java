@@ -1,5 +1,7 @@
 package miao.you.meng.config.dto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 
 /**
@@ -12,11 +14,9 @@ public class DataSourceConfigCompareDTO implements Serializable {
 
     private String key;
 
-    private String zooValue;
+    private String zkValue;
 
     private String mysqlValue;
-
-    private int compare;
 
     public String getKey() {
         return key;
@@ -26,12 +26,12 @@ public class DataSourceConfigCompareDTO implements Serializable {
         this.key = key;
     }
 
-    public String getZooValue() {
-        return zooValue;
+    public String getZkValue() {
+        return zkValue;
     }
 
-    public void setZooValue(String zooValue) {
-        this.zooValue = zooValue;
+    public void setZkValue(String zkValue) {
+        this.zkValue = zkValue;
     }
 
     public String getMysqlValue() {
@@ -42,11 +42,12 @@ public class DataSourceConfigCompareDTO implements Serializable {
         this.mysqlValue = mysqlValue;
     }
 
-    public int getCompare() {
-        return compare;
+    /**
+     * zookeeper和数据库中对应的值是否相同
+     * @return
+     */
+    public boolean isSame() {
+        return StringUtils.equals(zkValue, mysqlValue);
     }
 
-    public void setCompare(int compare) {
-        this.compare = compare;
-    }
 }

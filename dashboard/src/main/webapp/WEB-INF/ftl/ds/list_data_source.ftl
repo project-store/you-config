@@ -24,16 +24,16 @@
                     </h3>
                 </div>
                 <!-- 新增框 -->
-                <div class="modal fade" id="secondModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index:1100;">
+                <div class="modal fade" id="insertModalLabel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index:1100;">
                     <div class="modal-dialog" style="width:450px">
-                        <form action="/ds/add" method="post" >
+                        <form action="/datasource/config/add" method="post" onsubmit="return ajaxSubmitCallback(this);">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                         &times;
                                     </button>
                                     <br/>
-                                    <h4 class="modal-title" id="insertModalLabel">
+                                    <h4 class="modal-title" >
                                         <div class="form-group form-inline">
                                             <label for="name">&nbsp;名字&nbsp;:</label>
                                             <input type="text" name="appName" class="form-control" style="width:300px">
@@ -59,7 +59,8 @@
                                 <input type="hidden" value="" id="configId"/>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                    <button type="button" class="btn btn-primary" name="addNewDS" >新增</button>
+                                    <input type="submit" class="btn btn-primary" value="新增"/>
+                                    <#--<button type="button" class="btn btn-primary" name="addNewDS" >新增</button>-->
                                 </div>
                             </div>
                         </form>
@@ -92,7 +93,7 @@
                                 <td>${item.password!''}</td>
                                 <td>${item.updateTime?string("yyyy-MM-dd HH:mm")}</td>
                                 <td>
-                                    <a href= "/datasource/config/detail/${item.id!!''}" class="btn btn-primary" role="button">&nbsp;&nbsp; 查看 &nbsp;&nbsp;</a>
+                                    <a href= "/datasource/config/show/${item.id!!''}" class="btn btn-primary" role="button">详情</a>
                                 </td>
                             </tr>
                             </#list>
@@ -100,59 +101,27 @@
                     </table>
                 </div>
             </div>
-            <!-- 数据展示栏 -->
-            <!-- json返回触发按钮 -->
         </div>
     </div>
 </section>
 <script>
-    /*新增数据*/
-    $('button[name=addNewDS]').click(function(){
-        $("#insertModalLabel").
-        var appName = $('#newAppName').val();
-        var url = $('#newUrl').val();
-        var Host = $('#newHost').val();
-        var password = $("#newPassword").val();
-        var userName = $('#newUserName').val();
-        if (appName == "" || appName == null || appName == undefined){
-            showMsg("名字不能为空");
-            return;
-        } else if (url == null || url == "" || url == undefined){
-            showMsg("url不能为空");
-            return;
-        } else if (Host == null || Host == "" || Host == undefined){
-            showMsg("Host");
-            return;
-        } else if (userName == "" || userName == null || userName == undefined){
-            showMsg("用户名不能为空");
-            return;
-        } else if (password == "" || password == null || password == undefined){
-            showMsg("密码不能为空");
-            return;
-        }
-        var jsonData = {};
-        jsonData.appName = appName;
-        jsonData.url = url;
-        jsonData.host = Host;
-        jsonData.password = password;
-        jsonData.userName = userName;
+    function ajaxSubmitCallback(form) {
+        var $form = $(form);
         $.ajax({
-            url: "/ds/add",
-            type: "post",
-            data: jsonData,
+            url: $form.attr("action"),
+            data:$form.serializeArray(),
+            type:$form.attr("method"),
             dataType: "json",
-            async: "false",
             success: function(data){
-                var msg = data.messageText;
                 if (data.code == 0){
-                    showMsg(msg);
+                    showMsg(data.messageText);
                     window.location.reload();
                 } else {
-                    showMsg(msg);
+                    showMsg(data.messageText);
                 }
             }
-        })
-    })
-
+        });
+        return false;
+    }
 </script>
 </@page>

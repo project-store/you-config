@@ -10,16 +10,26 @@ import java.util.List;
  * Created by Administrator on 2017/4/25.
  */
 public interface DataSourceMapper {
-    public List<DataSourceDTO> listDataSource();
 
-    public void addParam(@Param("ds") DataSource ds);
+    /**
+     * 分页查询所有数据库应用配置
+     * @return
+     */
+    public List<DataSource> listDataSource();
 
-    public DataSource findDSByName(@Param("appName") String appName);
+    public void insertDataSource(@Param("ds") DataSource ds);
+
+    public DataSource findDataSourceByName(@Param("appName") String appName);
 
     public DataSource findDataSourceById(@Param("id")int id);
 
-    public String searchJson(@Param("id") int id);
+    public String getConfigXmlById(@Param("id") int id);
 
-    public void alertJson(@Param("id") int id, @Param("dsJson") String dsJson);
+    /**
+     * 更新数据源配置
+     * @param id
+     * @param xml
+     */
+    public void updateDataSource(@Param("id") int id, @Param("config") String xml);
 
 }

@@ -5,6 +5,7 @@ package miao.you.meng.config.constants;
  */
 public interface XMLNodeName {
 
+    String ROOT = "miao";
     String MASTER = "master";
     String SLAVE = "slave";
     String CONFIG = "config";

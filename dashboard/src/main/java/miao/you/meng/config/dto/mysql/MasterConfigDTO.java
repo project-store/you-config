@@ -13,5 +13,11 @@ public class MasterConfigDTO extends DataSourceConfigDTO {
 
     private final String type = MySQLRole.MASTER.toString();
 
+    public String getType() {
+        return type;
+    }
 
+    public String getDisplayName(){
+        return type;
+    }
 }

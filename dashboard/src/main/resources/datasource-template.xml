@@ -21,7 +21,28 @@
             <filters>stat</filters>
         </config>
     </master>
-    <slave>
+    <slave id="1">
+        <config>
+            <poolPreparedStatemklbs>true</poolPreparedStatemklbs>
+            <testOnBorrow>false</testOnBorrow>
+            <testWhileIdle>true</testWhileIdle>
+            <validationQuery>select sysdate()</validationQuery>
+            <removeAbandonedTimeout>1800</removeAbandonedTimeout>
+            <testOnReturn>true</testOnReturn>
+            <maxActive>500</maxActive>
+            <logAbandoned>true</logAbandoned>
+            <maxPoolPreparedStatemklbPerConnectionSize>20</maxPoolPreparedStatemklbPerConnectionSize>
+            <username>miaoyoumeng</username>
+            <maxWait>60000</maxWait>
+            <minIdle>1</minIdle>
+            <removeAbandoned>true</removeAbandoned>
+            <timeBetweenEvictionRunsMillis>3000</timeBetweenEvictionRunsMillis>
+            <minEvictableIdleTimeMillis>3000</minEvictableIdleTimeMillis>
+            <initialSize>10</initialSize>
+            <filters>stat</filters>
+        </config>
+    </slave>
+    <slave id="1">
         <config>
             <poolPreparedStatemklbs>true</poolPreparedStatemklbs>
             <testOnBorrow>false</testOnBorrow>

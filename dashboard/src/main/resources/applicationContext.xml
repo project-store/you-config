@@ -13,7 +13,6 @@
 
     <context:component-scan base-package="miao.you.meng.config.dashboard.controller"/>
 
-    <!--<import resource="applicationContext-service-config.xml"/>-->
     <bean id="client" class="miao.you.meng.config.spring.ZookeeperClientFactoryBean" >
         <property name="zookeeperCluster" value="${zookeeper.cluster}" />
         <property name="retryTimes" value="${retry.times}" />
@@ -22,7 +21,8 @@
 
     <bean id="appService" class="miao.you.meng.config.service.impl.AppServiceImpl"/>
     <bean id="configService" class="miao.you.meng.config.service.impl.ConfigServiceImpl"/>
-    <bean id="dsService" class="miao.you.meng.config.service.impl.DataSourceServiceImpl"/>
+    <bean id="dataSourceService" class="miao.you.meng.config.service.impl.DataSourceServiceImpl"/>
+    <bean id="dataSourceXmlService" class="miao.you.meng.config.service.impl.DataSourceXmlServiceImpl"/>
     <bean id="userService" class="miao.you.meng.config.service.impl.UserServiceImpl"/>
     <bean id="roleService" class="miao.you.meng.config.service.impl.RoleServiceImpl"/>
     <bean id="zookeeperService" class="miao.you.meng.config.service.impl.ZookeeperServiceImpl"/>

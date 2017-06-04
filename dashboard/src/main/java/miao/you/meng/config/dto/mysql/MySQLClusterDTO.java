@@ -1,5 +1,6 @@
 package miao.you.meng.config.dto.mysql;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
@@ -13,9 +14,19 @@ public class MySQLClusterDTO implements Serializable{
 
     private static final long serialVersionUID = 3504421302879783047L;
 
+    private String name;
+
     private MasterConfigDTO master;
 
     private List<SlaveConfigDTO> slaves = Lists.newArrayList();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public MasterConfigDTO getMaster() {
         return master;
@@ -32,6 +43,11 @@ public class MySQLClusterDTO implements Serializable{
 
     public void addSlave(SlaveConfigDTO slave) {
         this.slaves.add(slave);
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }
 

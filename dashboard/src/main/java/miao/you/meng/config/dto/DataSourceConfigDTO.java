@@ -15,21 +15,17 @@ public abstract class DataSourceConfigDTO implements Serializable {
 
     private  Map<String, String> connectionPool = Maps.newConcurrentMap();
 
-    private String config;
-
     public Map<String, String> getConnectionPool() {
         return connectionPool;
     }
 
-    public void setConnectionPool(Map<String, String> connectionPool) {
-        this.connectionPool = connectionPool;
+    public void setConfig(String key, String value) {
+        this.connectionPool.put(key, value);
     }
 
-    public String getConfig() {
-        return config;
-    }
+    public abstract String getType();
 
-    public void setConfig(String config) {
-        this.config = config;
-    }
+    public abstract String getDisplayName();
+
+
 }
