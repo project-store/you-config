@@ -94,7 +94,7 @@
                 </div>
                 <div class="box-header">
                     <h3 class="box-title">
-                        <button class="btn btn-success btn-sm add icon" data-toggle="modal" data-target="#secondModal">
+                        <button class="btn btn-success btn-sm add" data-toggle="modal" data-target="#secondModal">
                             + &nbsp新增
                         </button>
                     </h3>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <miao>
     <master>
-        <config>
+        <config>com.alibaba.druid.pool.DruidDataSource
             <poolPreparedStatemklbs>true</poolPreparedStatemklbs>
             <testOnBorrow>false</testOnBorrow>
             <testWhileIdle>true</testWhileIdle>
@@ -20,9 +20,10 @@
             <initialSize>10</initialSize>
             <filters>stat</filters>
         </config>
+        <type>master</type>
     </master>
     <slave id="1">
-        <config>
+        <config>com.alibaba.druid.pool.DruidDataSource
             <poolPreparedStatemklbs>true</poolPreparedStatemklbs>
             <testOnBorrow>false</testOnBorrow>
             <testWhileIdle>true</testWhileIdle>
@@ -41,6 +42,7 @@
             <initialSize>10</initialSize>
             <filters>stat</filters>
         </config>
+        <type>slave</type>
     </slave>
     <slave id="1">
         <config>
@@ -62,5 +64,6 @@
             <initialSize>10</initialSize>
             <filters>stat</filters>
         </config>
+        <type>slave</type>
     </slave>
 </miao>

@@ -18,7 +18,7 @@
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">
-                        <button class="btn btn-success btn-sm add icon" data-toggle="modal" data-target="#insertModalLabel">
+                        <button class="btn btn-success btn-sm add" data-toggle="modal" data-target="#insertModalLabel">
                             + &nbsp新增
                         </button>
                     </h3>
